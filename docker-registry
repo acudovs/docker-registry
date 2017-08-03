@@ -58,6 +58,7 @@ class DockerRegistry(object):
         session = requests.Session()
         session.headers = self._args.headers
         session.timeout = self._args.timeout
+        session.verify = self._args.verify
         if self._args.username and self._args.password:
             session.auth = (self._args.username, self._args.password)
         return session
@@ -258,6 +259,8 @@ class DockerImages(object):
         parser.add_argument('-t', '--timeout')
         parser.add_argument('-u', '--username')
         parser.add_argument('-p', '--password')
+        parser.add_argument('-k', '--insecure', action='store_false',
+                            dest='verify')
 
         subparsers = parser.add_subparsers(dest='action')
 

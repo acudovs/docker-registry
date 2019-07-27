@@ -6,10 +6,11 @@ import re
 import requests
 import shutil
 import urlparse
+import urllib3
 
 __author__ = 'Aleksey Chudov <aleksey.chudov@gmail.com>'
-__date__ = '21 Jan 2017'
-__version__ = '1.0.2'
+__date__ = '27 Jul 2019'
+__version__ = '1.0.3'
 
 USAGE = """usage examples:
     docker-registry catalog [name_regex] [tag_regex]
@@ -59,6 +60,7 @@ class DockerRegistry(object):
         session.headers = self._args.headers
         session.timeout = self._args.timeout
         session.verify = self._args.verify
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         if self._args.username and self._args.password:
             session.auth = (self._args.username, self._args.password)
         return session

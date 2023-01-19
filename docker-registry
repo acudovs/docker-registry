@@ -1,11 +1,11 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 
 import argparse
 import logging
 import re
 import requests
 import shutil
-import urlparse
+import urllib.parse
 import urllib3
 
 __author__ = 'Aleksey Chudov <aleksey.chudov@gmail.com>'
@@ -52,7 +52,7 @@ class DockerImage(RegistryObject):
 class DockerRegistry(object):
     def __init__(self, args):
         self._args = args
-        self._registry = urlparse.urlparse(self._args.url).netloc
+        self._registry = urllib.parse.urlparse(self._args.url).netloc
         self._session = self._create_session()
 
     def _create_session(self):
@@ -147,7 +147,7 @@ class RegistryManifest(DockerRegistry):
     def action(self):
         path = '/v2/{}/manifests/{}'.format(self._args.name, self._args.tag)
         response = self.get(path)
-        print(response.text.strip())
+        print((response.text.strip()))
 
 
 class RegistryBlob(DockerRegistry):
@@ -168,7 +168,7 @@ class PlainPrinter(object):
     def print_out(self):
         line = ' '.join('{{{}}}'.format(i) for i in range(len(self._headers)))
         for field in self._fields:
-            print(line.format(*field))
+            print((line.format(*field)))
 
 
 class TablePrinter(object):
@@ -201,24 +201,24 @@ class TablePrinter(object):
         sub_fields = []
         for header, header_len in zip(fields, self._header_lens):
             sub_fields.append('{:<{}}'.format(header, header_len))
-        print('| {} |'.format(' | '.join(sub_fields)))
+        print(('| {} |'.format(' | '.join(sub_fields))))
 
     def _print_total(self):
         total_len = sum(self._header_lens) + (len(self._headers) - 1) * 3
         total_format = (self._total_line.format(len(self._fields)), total_len)
-        print('| {:>{}} |'.format(*total_format))
+        print(('| {:>{}} |'.format(*total_format)))
 
     def print_out(self):
-        print(self._cross_line)
+        print((self._cross_line))
         self._print_fields(self._headers)
-        print(self._cross_line)
+        print((self._cross_line))
 
         for field in self._fields:
             self._print_fields(field)
 
-        print(self._cross_line)
+        print((self._cross_line))
         self._print_total()
-        print(self._cross_line)
+        print((self._cross_line))
 
 
 class DockerImages(object):
